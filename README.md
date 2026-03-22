@@ -83,10 +83,3 @@ The application will be available at [http://localhost:5173](http://localhost:51
 - **Reporting Center**: Generate professional Excel and CSV reports for attendance and team performance.
 - **Adaptive UI**: premium design with seamless dark/light mode transition.
 
----
-
-## Contributing
-Contributions are welcome! Please feel free to submit a Pull Request.
-
-## License
-This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
