@@ -13,6 +13,6 @@ public class DocumentDto {
     private Long employeeId;
     private String fileName;
     private String fileType;
-    private String downloadUrl;
+    private String fileUrl;   // main URL
     private LocalDateTime uploadedAt;
 }

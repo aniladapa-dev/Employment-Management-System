@@ -24,8 +24,7 @@ public class Document {
 
     private String fileType;
 
-    @Column(nullable = false)
-    private String filePath;
+    private String fileUrl; 
 
     private LocalDateTime uploadedAt = LocalDateTime.now();
 }

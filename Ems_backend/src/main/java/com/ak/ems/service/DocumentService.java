@@ -8,6 +8,6 @@ import java.util.List;
 public interface DocumentService {
     DocumentDto uploadDocument(Long employeeId, MultipartFile file);
     List<DocumentDto> getDocumentsByEmployee(Long employeeId);
-    Resource downloadDocument(Long documentId);
+    String getDownloadUrl(Long documentId);
     DocumentDto getDocumentInfo(Long documentId);
 }

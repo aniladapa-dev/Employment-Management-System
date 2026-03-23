@@ -33,13 +33,12 @@ public class DocumentController {
     }
 
     @GetMapping("/download/{id}")
-    public ResponseEntity<Resource> downloadDocument(@PathVariable("id") Long id) {
-        Resource file = documentService.downloadDocument(id);
-        DocumentDto info = documentService.getDocumentInfo(id);
-        
-        return ResponseEntity.ok()
-                .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"" + info.getFileName() + "\"")
-                .contentType(MediaType.parseMediaType(info.getFileType() != null ? info.getFileType() : "application/octet-stream"))
-                .body(file);
+    public ResponseEntity<Void> downloadDocument(@PathVariable Long id) {
+    String fileUrl = documentService.getDownloadUrl(id);
+
+        return ResponseEntity
+            .status(302)
+            .header(HttpHeaders.LOCATION, fileUrl)
+            .build();
     }
 }
