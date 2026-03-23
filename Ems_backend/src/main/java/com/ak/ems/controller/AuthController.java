@@ -14,7 +14,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.Map;
 
-//@CrossOrigin("*")
+
 @AllArgsConstructor
 @RestController
 @RequestMapping("/api/auth")

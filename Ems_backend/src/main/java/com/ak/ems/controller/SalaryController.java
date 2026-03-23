@@ -15,7 +15,6 @@ import java.util.List;
 @RestController
 @RequestMapping("/api/salary")
 @AllArgsConstructor
-//@CrossOrigin("*")
 public class SalaryController {
 
     private final SalaryService salaryService;
