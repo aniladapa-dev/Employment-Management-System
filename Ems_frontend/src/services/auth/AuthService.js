@@ -4,7 +4,8 @@ import apiClient from "../../apiConfig";
 const AUTH_REST_API_BASE_URL = import.meta.env.VITE_API_URL + "/auth";
 export const registerUser = (registerDto) => apiClient.post("/auth/register", registerDto);
 
-export const loginUser = (loginDto) => axios.post(AUTH_REST_API_BASE_URL + "/login", loginDto);
+export const loginUser = (loginDto) => 
+    apiClient.post("/auth/login", loginDto);
 export const changePassword = (oldPassword, newPassword) => apiClient.post("/auth/change-password", { oldPassword, newPassword });
 
 export const storeToken = (token) => localStorage.setItem("token", token);
