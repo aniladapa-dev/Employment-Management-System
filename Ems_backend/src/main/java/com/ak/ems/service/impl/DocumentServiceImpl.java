@@ -34,7 +34,10 @@ public class DocumentServiceImpl implements DocumentService {
             // Upload to Cloudinary
             Map uploadResult = cloudinary.uploader().upload(
                     file.getBytes(),
-                    ObjectUtils.asMap("resource_type", "auto")
+                    ObjectUtils.asMap(
+                            "resource_type", "auto",
+                            "access_mode", "public"
+                    )
             );
 
             String fileUrl = uploadResult.get("secure_url").toString();
@@ -46,7 +49,9 @@ public class DocumentServiceImpl implements DocumentService {
             document.setFileName(file.getOriginalFilename());
             document.setFileType(file.getContentType());
             document.setFileUrl(fileUrl);
-            document.setFilePath(fileUrl); // satisfy file_path column
+            document.setFilePath(fileUrl); 
+            document.setPublicId(uploadResult.get("public_id").toString());
+            document.setResourceType(uploadResult.get("resource_type").toString());
             document.setUploadedAt(LocalDateTime.now());
 
             Document saved = documentRepository.save(document);
@@ -88,9 +93,17 @@ public class DocumentServiceImpl implements DocumentService {
 
     @Override
     public String getDownloadUrl(Long documentId) {
-    Document document = documentRepository.findById(documentId)
-            .orElseThrow(() -> new RuntimeException("Document not found"));
+        Document document = documentRepository.findById(documentId)
+                .orElseThrow(() -> new RuntimeException("Document not found"));
 
-    return document.getFileUrl(); // Cloudinary URL
-}
+        if (document.getPublicId() != null && document.getResourceType() != null) {
+            // Generate a signed URL for secure access
+            return cloudinary.url()
+                    .resourceType(document.getResourceType())
+                    .signed(true)
+                    .generate(document.getPublicId());
+        }
+
+        return document.getFileUrl(); 
+    }
 }

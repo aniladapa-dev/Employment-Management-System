@@ -29,5 +29,8 @@ public class Document {
     @Column(name = "file_path")
     private String filePath;
 
+    private String publicId;
+    private String resourceType;
+
     private LocalDateTime uploadedAt = LocalDateTime.now();
 }
