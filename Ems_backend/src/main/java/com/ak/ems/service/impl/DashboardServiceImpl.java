@@ -88,7 +88,7 @@ public class DashboardServiceImpl implements DashboardService {
         analytics.add(new DashboardAnalyticsDto(
                 "Employees per Department", 
                 "pie", 
-                deptCounts.stream().map(o -> String.valueOf(o[0])).collect(Collectors.toList()),
+                deptCounts.stream().map(o -> o[0] != null ? String.valueOf(o[0]) : "No Dept").collect(Collectors.toList()),
                 deptCounts.stream().map(o -> o[1]).collect(Collectors.toList())
         ));
 
@@ -108,12 +108,16 @@ public class DashboardServiceImpl implements DashboardService {
         List<DashboardInsightDto> insights = new ArrayList<>();
         insights.add(new DashboardInsightDto("Recently Joined Employees", "list", 
                 employeeRepository.findTop5ByOrderByJoiningDateDesc().stream()
-                .map(e -> Map.of("name", e.getFirstName() + " " + e.getLastName(), "date", e.getJoiningDate().toString()))
+                .map(e -> createSafeMap(
+                        "name", e.getFirstName() + " " + e.getLastName(), 
+                        "date", e.getJoiningDate() != null ? e.getJoiningDate().toString() : "N/A"))
                 .collect(Collectors.toList())));
         
         insights.add(new DashboardInsightDto("Inactive Employees", "list", 
                 employeeRepository.findByActiveFalse().stream()
-                .map(e -> Map.of("name", e.getFirstName() + " " + e.getLastName(), "email", e.getEmail()))
+                .map(e -> createSafeMap(
+                        "name", e.getFirstName() + " " + e.getLastName(), 
+                        "email", e.getEmail()))
                 .collect(Collectors.toList())));
 
         dashboard.setInsights(insights);
@@ -158,7 +162,9 @@ public class DashboardServiceImpl implements DashboardService {
         List<DashboardInsightDto> insights = new ArrayList<>();
         insights.add(new DashboardInsightDto("Employees on Leave Today", "list", 
                 leaveRequestRepository.findEmployeesOnLeaveByDepartment(today, deptId).stream()
-                .map(l -> Map.of("name", l.getEmployee().getFirstName(), "type", l.getLeaveType().toString()))
+                .map(l -> createSafeMap(
+                        "name", l.getEmployee() != null ? l.getEmployee().getFirstName() : "Unknown", 
+                        "type", l.getLeaveType() != null ? l.getLeaveType().toString() : "Leave"))
                 .collect(Collectors.toList())));
         dashboard.setInsights(insights);
 
@@ -207,7 +213,9 @@ public class DashboardServiceImpl implements DashboardService {
         List<DashboardInsightDto> insights = new ArrayList<>();
         insights.add(new DashboardInsightDto("Pending Leave Requests", "list", 
                 leaveRequestRepository.findByEmployee_Team_IdAndStatus(teamId, LeaveStatus.PENDING).stream()
-                .map(l -> Map.of("name", l.getEmployee().getFirstName(), "reason", l.getReason()))
+                .map(l -> createSafeMap(
+                        "name", l.getEmployee() != null ? l.getEmployee().getFirstName() : "Unknown", 
+                        "reason", l.getReason()))
                 .collect(Collectors.toList())));
         dashboard.setInsights(insights);
 
@@ -236,7 +244,7 @@ public class DashboardServiceImpl implements DashboardService {
         cards.add(new DashboardCardDto("Leaves Taken", String.valueOf(leaveRequestRepository.findByEmployeeIdAndStatus(employee.getId(), LeaveStatus.APPROVED).size()), "plane", "info"));
         dashboard.setOverviewCards(cards);
 
-        // Analytics (None specifically requested for employee top center, but user wanted "attendance history")
+        // Analytics
         List<DashboardAnalyticsDto> analytics = new ArrayList<>();
         List<Object[]> history = attendanceRepository.countAttendanceHistory(employee.getId(), today.minusDays(30));
         analytics.add(new DashboardAnalyticsDto("My Monthly Attendance", "bar", 
@@ -248,7 +256,10 @@ public class DashboardServiceImpl implements DashboardService {
         List<DashboardInsightDto> insights = new ArrayList<>();
         insights.add(new DashboardInsightDto("Recent Leave Requests", "list", 
                 leaveRequestRepository.findTop5ByEmployeeIdOrderByStartDateDesc(employee.getId()).stream()
-                .map(l -> Map.of("type", l.getLeaveType().toString(), "status", l.getStatus().toString(), "from", l.getStartDate().toString()))
+                .map(l -> createSafeMap(
+                        "type", l.getLeaveType() != null ? l.getLeaveType().toString() : "Leave", 
+                        "status", l.getStatus() != null ? l.getStatus().toString() : "PENDING", 
+                        "from", l.getStartDate() != null ? l.getStartDate().toString() : "N/A"))
                 .collect(Collectors.toList())));
         dashboard.setInsights(insights);
 
@@ -259,6 +270,14 @@ public class DashboardServiceImpl implements DashboardService {
         ));
 
         return dashboard;
+    }
+
+    private Map<String, Object> createSafeMap(Object... entries) {
+        Map<String, Object> map = new java.util.HashMap<>();
+        for (int i = 0; i < entries.length; i += 2) {
+            map.put(String.valueOf(entries[i]), entries[i + 1]);
+        }
+        return map;
     }
 
     private DashboardResponseDto getEmpFallbackDashboard(String sub) {
