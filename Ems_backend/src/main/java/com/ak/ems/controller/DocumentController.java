@@ -11,10 +11,15 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import java.util.List;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 @RestController
 @RequestMapping("/api/documents")
 @RequiredArgsConstructor
 public class DocumentController {
+
+    private static final Logger logger = LoggerFactory.getLogger(DocumentController.class);
 
     private final DocumentService documentService;
 
@@ -22,6 +27,7 @@ public class DocumentController {
     public ResponseEntity<ApiResponse<DocumentDto>> uploadDocument(
             @RequestParam("employeeId") Long employeeId,
             @RequestParam("file") MultipartFile file) {
+        logger.info("RECEIVED upload request for employeeId: {}", employeeId);
         DocumentDto doc = documentService.uploadDocument(employeeId, file);
         return ResponseEntity.ok(ApiResponse.success("Document uploaded successfully", doc));
     }

@@ -11,11 +11,6 @@ public class EmsBackendApplication {
 
 	public static void main(String[] args) {
 
-		// TEMP: Generate password hash
-		BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
-		String hash = encoder.encode("admin123");
-		System.out.println("Generated Hash: " + hash);
-
 		SpringApplication.run(EmsBackendApplication.class, args);
 	}
 }
