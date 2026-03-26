@@ -125,7 +125,7 @@ const ProfileComponent = () => {
                                             <form onSubmit={handleUpdate} className="space-y-3">
                                                 <div>
                                                     <label className="text-xs font-bold text-slate-500 uppercase tracking-wider">Phone</label>
-                                                     <input type="text" className="mt-1 w-full px-3 py-2 text-sm bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-lg outline-none focus:ring-2 focus:ring-primary-500/20 focus:border-primary-500 text-slate-900 dark:text-white transition-all"
+                                                     <input type="text" placeholder="+91 9876543210" className="mt-1 w-full px-3 py-2 text-sm bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-lg outline-none focus:ring-2 focus:ring-primary-500/20 focus:border-primary-500 text-slate-900 dark:text-white transition-all"
                                                          value={updateDto.phone} onChange={e => { const v = e.target.value; setUpdateDto(prev => ({...prev, phone: v})); }} />
                                                  </div>
                                                  <div>

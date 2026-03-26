@@ -235,7 +235,7 @@ const EmployeeComponent = () => {
             <InputGroup label="Phone Number" icon={Phone}>
               <input 
                 type="text"
-                placeholder="+1 (555) 000-0000"
+                placeholder="+91 9876543210"
                 className="w-full px-4 py-3 bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-800 rounded-xl outline-none focus:border-primary-500 focus:ring-4 focus:ring-primary-500/10 transition-all font-medium"
                 value={phone}
                 onChange={(e) => setPhone(e.target.value)}
