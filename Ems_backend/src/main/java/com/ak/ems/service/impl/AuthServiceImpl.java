@@ -10,6 +10,7 @@ import com.ak.ems.repository.RoleRepository;
 import com.ak.ems.repository.UserRepository;
 import com.ak.ems.security.JwtTokenProvider;
 import com.ak.ems.service.AuthService;
+import com.ak.ems.service.EmailService;
 import lombok.AllArgsConstructor;
 
 import java.time.LocalDateTime;
@@ -33,6 +34,7 @@ public class AuthServiceImpl implements AuthService {
     private RoleRepository roleRepository;
     private PasswordEncoder passwordEncoder;
     private JwtTokenProvider jwtTokenProvider;
+    private EmailService emailService;
 
 
     @Override
@@ -71,6 +73,14 @@ public class AuthServiceImpl implements AuthService {
         user.setRoles(roles);
 
         userRepository.save(user);
+
+        // Send credentials email
+        emailService.sendCredentialsEmail(
+                user.getEmail(),
+                user.getName(),
+                user.getUsername(),
+                registerDto.getPassword() // Raw password for the user to see
+        );
 
         return "User Registered Successfully!";
     }

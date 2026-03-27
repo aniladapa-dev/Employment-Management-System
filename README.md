@@ -27,7 +27,21 @@ A robust, enterprise-grade Employee Management System built with **Spring Boot 3
     - **Signed URLs**: Temporary secure links for document downloads to resolve access restrictions.
 - **Salary Management**: Track salary history and payroll simulations.
 - **Attendance & Leave**: Automated leave balance tracking and attendance logs.
+- **Email Notifications**: Automated onboarding emails containing login credentials for new employees.
 - **Premium UI**: Dark-mode support, HSL-tailored color palettes, and glassmorphism effects.
+---
+## ⚙️ Environment Variables (Backend)
+To run the backend in production, ensure the following variables are configured:
+| Key | Description |
+|---|---|
+| `DB_URL` | Aiven MySQL Connection String (with `sslMode=REQUIRED`) |
+| `DB_USERNAME` / `DB_PASSWORD` | Database credentials |
+| `JWT_SECRET` | 256-bit Base64 encoded secret key |
+| `CLOUDINARY_CLOUD_NAME` | Cloudinary Account Name |
+| `CLOUDINARY_API_KEY` / `CLOUDINARY_API_SECRET` | Cloudinary Credentials |
+| `EMAIL_USERNAME` | Gmail address for notifications |
+| `EMAIL_PASSWORD` | 16-character Google App Password |
+| `FRONTEND_URL` | URL of the deployed React application (for CORS) |
 ---
 ## 🏗️ Technical Architecture
 

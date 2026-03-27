@@ -108,23 +108,41 @@ public class DocumentServiceImpl implements DocumentService {
                 .orElseThrow(() -> new RuntimeException("Document not found"));
 
         if (document.getPublicId() != null && document.getResourceType() != null) {
-            // Generate a signed URL for secure access
-            // Corrected: Include the format (extension) in the public ID if available
-            String publicIdWithFormat = document.getPublicId();
-            if (document.getFormat() != null && !document.getFormat().isEmpty()) {
-                // Only append if it's not already there (raw resources include it in publicId)
-                if (!publicIdWithFormat.endsWith("." + document.getFormat())) {
-                    publicIdWithFormat += "." + document.getFormat();
+            String fileUrl = document.getFileUrl();
+            String format = document.getFormat();
+            String version = null;
+
+            // Extract version (e.g., v177...) and format from fileUrl if missing
+            try {
+                if (fileUrl != null && fileUrl.contains("/v")) {
+                    int vPos = fileUrl.indexOf("/v") + 1; // skip slash
+                    int nextSlash = fileUrl.indexOf("/", vPos);
+                    if (nextSlash > vPos) {
+                        version = fileUrl.substring(vPos, nextSlash);
+                        // Remove leading 'v' if present for the SDK
+                        if (version.startsWith("v")) version = version.substring(1);
+                    }
                 }
+                
+                if ((format == null || format.isEmpty()) && fileUrl != null && fileUrl.contains(".")) {
+                    format = fileUrl.substring(fileUrl.lastIndexOf(".") + 1);
+                }
+            } catch (Exception e) {
+                logger.warn("Could not extract version or format from URL: {}", fileUrl);
             }
 
-            String signedUrl = cloudinary.url()
-                    .resourceType(document.getResourceType())
-                    .secure(true)
-                    .signed(true)
-                    .generate(publicIdWithFormat);
+            // Build exact signed URL
+            var urlBuilder = cloudinary.url()
+                .resourceType(document.getResourceType())
+                .secure(true)
+                .signed(true);
+
+            if (version != null) urlBuilder.version(version);
+            if (format != null) urlBuilder.format(format);
+
+            String signedUrl = urlBuilder.generate(document.getPublicId());
             
-            logger.info("Generated Signed Download URL: {}", signedUrl);
+            logger.info("Generated Versioned Signed URL: {}", signedUrl);
             return signedUrl;
         }
 
