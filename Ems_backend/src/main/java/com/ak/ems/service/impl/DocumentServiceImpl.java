@@ -100,6 +100,7 @@ public class DocumentServiceImpl implements DocumentService {
             // Generate a signed URL for secure access
             return cloudinary.url()
                     .resourceType(document.getResourceType())
+                    .secure(true)
                     .signed(true)
                     .generate(document.getPublicId());
         }
