@@ -1,85 +1,51 @@
-# Employment Management System (EMS)
-
-[![Spring Boot](https://img.shields.io/badge/Spring%20Boot-3.4.1-brightgreen.svg)](https://spring.io/projects/spring-boot)
-[![React](https://img.shields.io/badge/React-18-blue.svg)](https://reactjs.org/)
-[![MySQL](https://img.shields.io/badge/MySQL-8.0-orange.svg)](https://www.mysql.com/)
-[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
-
-A robust, full-stack Enterprise Resource Planning (ERP) solution tailored for modern workforce management. This system streamlines employee lifecycle management, attendance tracking, and administrative workflows with a focus on performance and user experience.
-
+# Employee Management System (EMS) - Full Stack
+A robust, enterprise-grade Employee Management System built with **Spring Boot 3**, **React 18**, and **MySQL**. This application provides a comprehensive suite of tools for managing employees, tracking attendance, handling salaries, and secure document storage.
+### 🔗 Live Production Links
+- **Frontend (Vercel)**: [https://employment-management-system-gamma.vercel.app/](https://employment-management-system-gamma.vercel.app/)
+- **Backend (Render)**: [https://employment-management-system-mt72.onrender.com](https://employment-management-system-mt72.onrender.com)
+- **Database**: Managed MySQL (Aiven)
 ---
-
-## 🛠️ Technology Stack
-
+## 🛠️ Tech Stack
 ### Backend
-- **Core**: Java 21, Spring Boot 3.4
-- **Security**: Spring Security, JWT (JSON Web Token)
-- **Data**: Spring Data JPA, Hibernate, MySQL 8.0
-- **Documentation**: SpringDoc OpenAPI (Swagger)
-- **Reporting**: Apache POI (Excel), OpenCSV
-
+- **Java 21** / **Spring Boot 3.4**
+- **Spring Security** (JWT-based Authentication)
+- **Spring Data JPA** (Hibernate 6)
+- **Cloudinary SDK** (Secure File & PDF Storage)
+- **Lombok** (Boilerplate reduction)
+- **MySQL 8** (Database)
 ### Frontend
-- **Framework**: React 18 (Vite)
-- **Styling**: Vanilla CSS (Modern, Responsive Design)
-- **Icons**: Lucide React
-- **Theming**: Dynamic Dark/Light mode with persistence
-
+- **React 18** (Vite)
+- **Vanilla CSS** (Custom Premium UI/UX)
+- **Axios** (API Interfacing)
+- **Lucide-React** (Iconography)
 ---
+##  Key Features
+- **Role-Based Access Control (RBAC)**: Secure access for Admins and Staff.
+- **Interactive Dashboard**: Real-time analytics, charts (Recharts), and system overviews.
+- **Document Management**: 
+    - Secure PDF/Resume uploads via Cloudinary.
+    - **Signed URLs**: Temporary secure links for document downloads to resolve access restrictions.
+- **Salary Management**: Track salary history and payroll simulations.
+- **Attendance & Leave**: Automated leave balance tracking and attendance logs.
+- **Premium UI**: Dark-mode support, HSL-tailored color palettes, and glassmorphism effects.
+---
+## 🏗️ Technical Architecture
 
-## Project Architecture
+The system follows a classic **N-tier Architecture** with a clear separation between the presentation, business logic, and data layers.
 
-```text
-.
-├── Ems_backend          # Spring Boot REST API
-│   ├── src/main/java    # Backend Source Code
-│   ├── src/main/res     # Configuration (application.properties)
-│   └── pom.xml          # Maven Dependencies
-├── Ems_frontend         # React Frontend Application
-│   ├── src/             # Components, Hooks, Services
-│   ├── public/          # Static Assets
-│   └── package.json     # NPM Dependencies
-└── README.md            # Project Overview
+```mermaid
+graph TD
+    A[React Frontend] -->|REST API + JWT| B[Spring Boot Backend]
+    B -->|JPA/Hibernate| C[(MySQL Database - Aiven)]
+    B -->|Streaming| D[Cloudinary - Storage]
+    B -->|Authentication| E[Spring Security - JWT]
 ```
 
+### 🔹 Layered Design
+- **Presentation Layer**: Built with **React**; uses **Axios** to communicate with the backend. It's fully stateless, relying on JWT tokens stored in the browser.
+- **Security Layer**: **Spring Security** intercepts every request, validates the JWT, and enforces Role-Based Access Control (RBAC).
+- **Service Layer**: Contains the core business logic, including salary calculations, attendance processing, and Cloudinary file handling.
+- **Persistence Layer**: **Spring Data JPA** manages the database interactions with MySQL, ensuring data integrity and version control via Hibernate.
 ---
 
-##  Getting Started
-
-### Prerequisites
-- **JDK 21** or higher
-- **Node.js 18** or higher
-- **MySQL Server** running on port 3306
-
-### 1. Database Setup
-1. Log in to MySQL: `mysql -u root -p`
-2. Create the database: `CREATE DATABASE ems;`
-3. Update `Ems_backend/src/main/resources/application.properties` with your credentials.
-
-### 2. Backend Installation
-```bash
-cd Ems_backend
-./mvnw clean install
-./mvnw spring-boot:run
-```
-> [!TIP]
-> Access the API documentation at [http://localhost:8080/swagger-ui/index.html](http://localhost:8080/swagger-ui/index.html) once the server starts.
-
-### 3. Frontend Installation
-```bash
-cd Ems_frontend
-npm install
-npm run dev
-```
-The application will be available at [http://localhost:5173](http://localhost:5173).
-
----
-
-## ✨ Key Features
-
-- **Employee Directory**: Comprehensive management of employee profiles and documents.
-- ** Attendance Engine**: Smart attendance logging with office/remote work modes.
-- **Leave Workflow**: Automated leave request submission and approval system.
-- **Secure Access**: Role-Based Access Control (RBAC) ensuring Admin, Team Leader, and Employee data privacy.
-- **Reporting Center**: Generate professional Excel and CSV reports for attendance and team performance.
-- **Adaptive UI**: premium design with seamless dark/light mode transition.
-
+*Developed by Anil Kumar Adapa - 2026*
